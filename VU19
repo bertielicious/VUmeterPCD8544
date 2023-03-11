@@ -1,0 +1,35 @@
+include <xc.h>
+#include "config.h"
+#include "constants.h"
+#include "configOsc.h"
+#include "configPins.h"
+#include "configSPI.h"
+#include "configEUSART.h"
+#include "configBaud.h"
+#include "configPCD8544.h"
+#include "clearPCD8544.h"
+#include "setAddress.h"
+#include "writeCommand.h"
+#include "writeData.h"
+#include "select0To47.h"
+#include "configADC.h"
+void drawBackground(void)
+{
+   
+     
+        for(radius = 0; radius <=43; radius++)
+        {
+            opposite = radius * sineLookUp[angle];     // x = opposite
+            adjacent = radius * cosineLookUp[angle];   // y = adjacent
+            xcoord = (opposite>>8) + 42;
+            ycoord = (adjacent>>8) -3;
+           
+            select0To47(ycoord, &ypixel);
+            writeCommand(0x22); //horizontal addressing
+             if(ycoord >=0)
+             {
+                setAddress(xcoord,ypixel.page);
+                writeData(ypixel.byte);
+             }
+        }
+}
